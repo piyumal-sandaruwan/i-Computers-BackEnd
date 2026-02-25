@@ -24,7 +24,7 @@ export function createUser(req, res) {
     });
 }
 
-//get all users
+
 export function getAllUsers(req, res) {
     if (req.user == null) {
         res.json({ message: "Unauthorized User" });
@@ -48,7 +48,7 @@ export function loginUser(req, res) {
     
     User.find({ email: emaill }).then((users) => {
         if (users[0] == null) {
-            res.json({ message: "user not found" });
+            res.status(404).json({ message: "user not found" });
         } else {
             const user = users[0];
             if(user.invalidTries>=1000){

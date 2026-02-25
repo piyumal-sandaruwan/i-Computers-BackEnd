@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import orderRouter from './routes/orderRouter.js';
 dotenv.config();
 const mongoURL = process.env.MONGO_URL;
 
@@ -49,7 +50,7 @@ app.use(
 // --- ROUTES MOVED DOWN ---
 app.use('/api/users', userRouter); 
 app.use('/api/products', productRouter);
-
+app.use('/api/orders',orderRouter)
 
 
 app.listen(3000, () => {
