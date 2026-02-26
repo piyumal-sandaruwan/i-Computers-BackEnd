@@ -3,6 +3,7 @@ dotenv.config();
 
 import Product from "../models/Product.js";
 import { isAddmin } from "./userController.js";
+import Order from "../models/Order.js";
 
 
 export async function createProduct(req, res) {
@@ -82,3 +83,5 @@ export async function getProductById(req, res) {
         res.status(500).json({ message: "Error fetching product", error: error.message });
     }
 }
+
+

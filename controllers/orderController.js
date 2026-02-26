@@ -123,3 +123,26 @@ export async function getOrders(req, res) {
         res.status(500).json({ message: "Error fetching orders" });
     }
 }
+export async function updateOrderStatus(req, res) {
+    if (!isAddmin(req)) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+    try {
+        const { orderId } = req.params;
+        const { status, notes } = req.body;
+
+        const result = await Order.updateOne(
+            { orderId: orderId }, 
+            { status: status, notes: notes }
+        );
+
+        if (result.matchedCount === 0) {
+            // If it reaches here, the URL was correct, but the ID doesn't exist in DB
+            return res.status(404).json({ message: `Order ${orderId} not found in database` });
+        }
+
+        res.json({ message: "Order Status Updated Successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+}
