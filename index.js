@@ -27,7 +27,7 @@ app.use(
         const authorizationHeader = req.header("Authorization");
 
         if (authorizationHeader != null) {
-            // console.log("Authorization header found: " + authorizationHeader);
+            
             const token = authorizationHeader.replace("Bearer ", "");// Extracts the token from the header
             
             jwt.verify(token, process.env.JWT_SECRET,

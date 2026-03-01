@@ -1,14 +1,15 @@
 import express from 'express';
-import { getAllUsers } from '../controllers/userController.js';
+import { getUser } from '../controllers/userController.js';
 import { loginUser } from '../controllers/userController.js';
 import { createUser } from '../controllers/userController.js';
 const userRouter = express.Router();
 
-userRouter.post("/register", createUser);
-
-userRouter.get("/",getAllUsers);
-
+userRouter.post("/", createUser);
 userRouter.post("/login", loginUser);
+userRouter.get("/",getUser);
+
+
+
 
 
 

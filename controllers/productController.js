@@ -23,7 +23,7 @@ export async function createProduct(req, res) {
 }
 
 export async function getAllProducts(req, res) {
-    // console.log("products fetching")//demonstrating that this function is being called
+    
     try {
         let products;
         if (isAddmin(req)) { // Check if the user is an admin

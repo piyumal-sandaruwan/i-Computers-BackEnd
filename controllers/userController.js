@@ -104,3 +104,12 @@ export function isAddmin(req) {
     return true;
 
 }
+
+export function getUser(req,res){
+    if(req.user==null){
+        res.status(401).json({
+            message:"Unauthorized"
+        })
+    }return
+    res.json(req.user)
+}
