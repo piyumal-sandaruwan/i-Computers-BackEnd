@@ -205,9 +205,12 @@ export async function googleLogin(req, res) {
 export async function validateOtpAndUpdatePassword(req,res){
     //from user inputs
     try{
+
+         console.log(req.body);
+         
     const otp = req.body.otp
     const email = req.body.email
-    const newPassword = req.body.newpassword
+    const newPassword = req.body.newPassword
    
 
      if (!newPassword) {
