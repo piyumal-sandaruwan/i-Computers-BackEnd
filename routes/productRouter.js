@@ -1,11 +1,10 @@
 import express from "express";
-import { createProduct, deleteProduct, getAllProducts, getProductById, updateProduct } from "../controllers/productController.js";
+import { createProduct, deleteProduct, getAllProducts, getProductById, searchProduct, updateProduct } from "../controllers/productController.js";
 
 const productRouter = express.Router();
 
 productRouter.get('/',getAllProducts);
-
-
+productRouter.get('/search/:query',searchProduct)
 productRouter.post('/',createProduct);
 productRouter.delete('/:id', deleteProduct);
 productRouter.put('/:id', updateProduct); // Assuming you want to use the same function for updating as well, you can modify it accordingly in the controller.

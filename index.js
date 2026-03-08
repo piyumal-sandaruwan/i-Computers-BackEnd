@@ -6,53 +6,43 @@ import jwt from 'jsonwebtoken';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import orderRouter from './routes/orderRouter.js';
+
 dotenv.config();
 const mongoURL = process.env.MONGO_URL;
 
-mongoose.connect(mongoURL).then(
-    () => {
-        console.log("Connected to MongoDB");
-    }
-);
-
+mongoose.connect(mongoURL).then(() => console.log("Connected to MongoDB"));
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// This must run BEFORE the routes so req.user is populated
-app.use(
-    (req, res, next) => {
-        // This checks for the "Authorization" header
-        const authorizationHeader = req.header("Authorization");
+// FIXED MIDDLEWARE: Does not block login if token is missing/invalid
+app.use((req, res, next) => {
+    const authHeader = req.header("Authorization");
 
-        if (authorizationHeader != null) {
-            
-            const token = authorizationHeader.replace("Bearer ", "");// Extracts the token from the header
-            
-            jwt.verify(token, process.env.JWT_SECRET,
-                (error, content) => {
-                    if (error) {
-                        console.log("invalid token");
-                        res.json({ message: "invalid token" });
-                    } else {
-                        req.user = content; // Sets the user data
-                        next();
-                    }
-                }
-            );
-        } else {
-            next();  
-        }
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+        const token = authHeader.replace("Bearer ", "");
+        
+        // Handle "Bearer null" or "Bearer undefined" strings from frontend
+        if (token === "null" || token === "undefined") return next();
+
+        jwt.verify(token, process.env.JWT_SECRET, (error, decoded) => {
+            if (error) {
+                // Only return 401 if they are trying to access protected data, 
+                // but let the request continue so login/public routes still work.
+                console.log("Token verification failed");
+            } else {
+                req.user = decoded;
+            }
+            next();
+        });
+    } else {
+        next();
     }
-);
+});
 
-// --- ROUTES MOVED DOWN ---
 app.use('/api/users', userRouter); 
 app.use('/api/products', productRouter);
-app.use('/api/orders',orderRouter)
+app.use('/api/orders', orderRouter);
 
-
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-});
+app.listen(3000, () => console.log('Server is running on port 3000'));
