@@ -110,10 +110,15 @@ export async function loginUser(req, res) {
         // Ensure this role is sent so the frontend can redirect correctly
 
         res.json({
-            message: "Login successful",
-            token,
-            role: user.role
-        });
+                message: "Login successful",
+                token,
+                role: user.role,
+                user: { // Add this block
+                    firstName: user.firstName,
+                    image: user.image,
+                    email: user.email
+    }
+});
 
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
@@ -196,9 +201,13 @@ export async function googleLogin(req, res) {
         return res.json({
             message: "Login successful",
             token: token,
-            role: user.role
-        });
-
+            role: user.role,
+            user: { // Add this block
+                firstName: user.firstName,
+                image: user.image,
+                email: user.email
+    }
+});
     } catch (error) {
         console.error("Google Login Error:", error.message);
         return res.status(500).json({
