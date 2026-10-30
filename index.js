@@ -30,7 +30,7 @@ app.use((req, res, next) => {
             if (error) {
                 // Only return 401 if they are trying to access protected data, 
                 // but let the request continue so login/public routes still work.
-                console.log("Token verification failed");
+                console.log("Token verification is failed");
             } else {
                 req.user = decoded;
             }
@@ -45,4 +45,9 @@ app.use('/api/users', userRouter);
 app.use('/api/products', productRouter);
 app.use('/api/orders', orderRouter);
 
-app.listen(3000, () => console.log('Server is running on port 3000'));
+// app.listen(3000, () => console.log('Server is running on port 3000'));
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server is running on port ${PORT}`);
+});
